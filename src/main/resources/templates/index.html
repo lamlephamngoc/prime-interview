@@ -1,0 +1,116 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row no-gutter">
+        <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+        <div class="col-md-8 col-lg-6">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto">
+                            <h3 class="login-heading mb-4">Highest prime number lower than input number</h3>
+                            <div id="contents">
+                                <form @submit.prevent="onSubmit">
+                                    <div class="form-label-group">
+                                        <div class="row pb-3">
+                                            <div class="input-group">
+                                                <span class="pr-5">
+                                                    <input
+                                                            class="form-control"
+                                                            v-model.number="inputNumber"
+                                                            :maxlength="inputNumberMaxLength"
+                                                            @keyup.enter="getHighestPrime()"
+                                                            @focus="clearInputWhenNumberIsZero()"
+                                                            :placeholder="placeholder"
+                                                            type="number"
+                                                            />
+                                                </span>
+                                                <span class="input-group-btn">
+                                                    <button
+                                                            type="submit"
+                                                            class="btn btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
+                                                            @click="getHighestPrime()">Submit
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <small class="form-text text-muted">Please input integer number max length 15</small>
+                                        </div>
+                                        <div class="row pb-3">
+                                            <div class="btn btn-info">Highest prime lower than input number {{ inputNumber }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div v-if="this.highestPrime == -1" class="btn btn-danger"> There is no prime number lower than {{ inputNumber }}
+                                            </div>
+                                            <div v-else class="btn btn-success" v-show="highestPrime != undefined">Prime number is {{ highestPrime }}</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+
+<script type="text/babel">
+
+    var app = new Vue({
+        el: '#contents',
+        data: {
+            placeholder: 'Please input your number',
+            inputNumber: 0,
+            highestPrime: undefined,
+            inputNumberMaxLength: 15,
+            players: [
+                {id: "1", name: "Lionel Messi", description: "Argentina's superstar"},
+                {id: "2", name: "Christiano Ronaldo", description: "Portugal top-ranked player"}
+            ]
+        },
+        methods: {
+            getHighestPrime: function(event) {
+                axios
+                    .post("/api/highestPrime", {input: this.inputNumber})
+                    .then((r) => {
+                            this.highestPrime = r.data
+                    })
+                    .catch((e) => {alert("error " + e)});
+
+            },
+
+            clearInputWhenNumberIsZero: function(event) {
+                if(inputNumber == 0) inputNumber = undefined;
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
