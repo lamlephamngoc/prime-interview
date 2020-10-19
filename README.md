@@ -33,5 +33,10 @@ $ docker build -t interview/spring-boot-vue-prime:1.0.0-SNAPSHOT .
 $ docker run -d -p 9999:8080 -t interview/spring-boot-vue-prime:1.0.0-SNAPSHOT
 ```
 
+Open browser and go to
+```
+http://localhost:9999
+```
+
 ### About author
-Copyright © Lamle@gmx.com
+Copyright © lamle@gmx.com
