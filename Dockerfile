@@ -1,9 +1,12 @@
 FROM maven:3.6.3-jdk-11 AS MAVEN_BUILD
 
-COPY ./src /app/src/
 COPY ./pom.xml /app/
 
 WORKDIR /app
+
+RUN mvn clean verify --fail-never
+
+COPY ./src /app/src/
 
 RUN mvn clean package
 
